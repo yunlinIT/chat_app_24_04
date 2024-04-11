@@ -18,17 +18,25 @@ public class ChatController {
     @PostMapping("/writeMessage")
     @ResponseBody
     public RsData<writeMessageResponse> writeMessage() {
-
         ChatMessage message = new ChatMessage("홍길동", "안녕하세요");
-
         chatMessages.add(message);
-
-        return new RsData(
+        return new RsData<>(
                 "S-1",
                 "메세지가 작성됨",
                 new writeMessageResponse(message.getId()
                 )
         );
+    }
+
+    @GetMapping("/messages")
+    @ResponseBody
+    public RsData<List<ChatMessage>> messages() {
+        return new RsData<>(
+                "S-1",
+                "성공",
+                chatMessages
+        );
+
     }
 
 
