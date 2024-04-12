@@ -1,2 +1,5 @@
 server:
-  port:8080
+  port: 8020
+logging:
+  level:
+    com.koreait.exam.chat_app_24_04: debug
