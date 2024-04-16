@@ -1,7 +1,6 @@
 package com.koreait.exam.chat_app_24_04;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,11 @@ import java.util.stream.IntStream;
 @Controller
 @Slf4j
 @RequestMapping("/chat")
+@RequiredArgsConstructor
 public class ChatController {
+
+    private final SseEmitters sseEmitters;
+
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
     public record writeMessageRequest(String authorName, String content) {
@@ -33,6 +36,9 @@ public class ChatController {
     public RsData<writeMessageResponse> writeMessage(@RequestBody writeMessageRequest req) {
         ChatMessage message = new ChatMessage(req.authorName, req.content);
         chatMessages.add(message);
+
+        sseEmitters.noti("chat__messageAdded");
+
         return new RsData<>(
                 "S-1",
                 "메세지가 작성됨",
