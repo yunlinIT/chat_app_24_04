@@ -71,6 +71,7 @@
         form.content.value = '';
         form.content.focus();
     }
+
     // 채팅 메세지 작성
 
     // 채팅 메세지들 읽기(read)
@@ -104,8 +105,15 @@
         });
 
         // Chat__loadMore();// 즉시실행
-        setTimeout(Chat__loadMore, 500);
+        // setTimeout(Chat__loadMore, 500); -> 무분별한 호출
     }
+
+    const sse = new EventSource("/sse/connect");
+
+    sse.addEventListener('chat__messageAdded', e => {
+            Chat__loadMore();
+        }
+    )
 
     Chat__loadMore();
 
